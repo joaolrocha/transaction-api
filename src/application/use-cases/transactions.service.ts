@@ -25,7 +25,6 @@ export class TransactionsService {
     const { amount, timestamp } = createTransactionDto;
     const transactionDate = new Date(timestamp);
     const now = new Date();
-
     // Validar se a transação não está no futuro
     if (transactionDate > now) {
       throw new UnprocessableEntityException(
@@ -43,7 +42,8 @@ export class TransactionsService {
   }
 
   async getStatistics(): Promise<StatisticsResponseDto> {
-    const repository = this.transactionRepository as any; // Cast para acessar método auxiliar
+    // TESTE: pegar TODAS as transações temporariamente
+    const repository = this.transactionRepository as any;
     const transactions = await repository.findWithinLastSeconds(60);
 
     if (transactions.length === 0) {
