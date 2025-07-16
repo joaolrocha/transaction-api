@@ -1,0 +1,48 @@
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { TransactionsService } from '../../application/use-cases/transactions.service';
+import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
+
+@ApiTags('transactions')
+@Controller('transactions')
+export class TransactionsController {
+  constructor(private readonly transactionsService: TransactionsService) {}
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create a new transaction' })
+  @ApiBody({ type: CreateTransactionDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Transaction created successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request - Invalid JSON format',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Unprocessable Entity - Business rule violation',
+  })
+  @UsePipes(
+    new ValidationPipe({
+      transform: false,
+      whitelist: true,
+      stopAtFirstError: true,
+      forbidNonWhitelisted: true,
+    }),
+  )
+  async createTransaction(
+    @Body() createTransactionDto: CreateTransactionDto,
+  ): Promise<void> {
+    await this.transactionsService.createTransaction(createTransactionDto);
+  }
+}
