@@ -15,6 +15,10 @@ export class TransactionsService {
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 
+  async getAllTransactions(): Promise<Transaction[]> {
+    return await this.transactionRepository.findAll();
+  }
+
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<void> {
