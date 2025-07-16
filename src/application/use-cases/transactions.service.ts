@@ -74,8 +74,8 @@ export class TransactionsService {
   }
 
   async getStatistics(): Promise<StatisticsResponseDto> {
-    const repository = this.transactionRepository as any;
-    const transactions = await repository.findWithinLastSeconds(60);
+    const transactions =
+      await this.transactionRepository.findWithinLastSeconds(60);
 
     this.logger.info('Calculating statistics', {
       transactionsCount: transactions.length,
