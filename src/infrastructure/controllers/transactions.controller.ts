@@ -5,23 +5,41 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 import { TransactionsService } from '../../application/use-cases/transactions.service';
 import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
 
 @ApiTags('transactions')
 @Controller('transactions')
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(
+    private readonly transactionsService: TransactionsService,
+    @Inject(WINSTON_MODULE_PROVIDER)
+    private readonly logger: Logger,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all transactions (for testing)' })
   async getAllTransactions() {
-    return await this.transactionsService.getAllTransactions();
+    this.logger.info('GET /transactions called', {
+      context: 'TransactionsController',
+    });
+
+    const transactions = await this.transactionsService.getAllTransactions();
+
+    this.logger.info('GET /transactions completed', {
+      transactionCount: transactions.length,
+      context: 'TransactionsController',
+    });
+
+    return transactions;
   }
 
   @Post()
@@ -51,7 +69,17 @@ export class TransactionsController {
   async createTransaction(
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<void> {
+    this.logger.info('POST /transactions called', {
+      amount: createTransactionDto.amount,
+      timestamp: createTransactionDto.timestamp,
+      context: 'TransactionsController',
+    });
+
     await this.transactionsService.createTransaction(createTransactionDto);
+
+    this.logger.info('POST /transactions completed successfully', {
+      context: 'TransactionsController',
+    });
   }
 
   @Delete()
@@ -62,6 +90,14 @@ export class TransactionsController {
     description: 'All transactions deleted successfully',
   })
   async deleteAllTransactions(): Promise<void> {
+    this.logger.info('DELETE /transactions called', {
+      context: 'TransactionsController',
+    });
+
     await this.transactionsService.deleteAllTransactions();
+
+    this.logger.info('DELETE /transactions completed successfully', {
+      context: 'TransactionsController',
+    });
   }
 }
