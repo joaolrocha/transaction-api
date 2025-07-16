@@ -14,6 +14,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('transactions', 'Transaction management endpoints')
     .addTag('statistics', 'Statistics calculation endpoints')
+    .addTag('health', 'Health check endpoints')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -22,5 +23,6 @@ async function bootstrap() {
   await app.listen(3000);
   console.log('🚀 Application running on: http://localhost:3000');
   console.log('📚 Swagger documentation: http://localhost:3000/api');
+  console.log('🔒 Rate limiting: 10 req/min, 100 req/5min');
 }
 bootstrap();
