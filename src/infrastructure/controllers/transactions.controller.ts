@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -15,6 +17,12 @@ import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Get all transactions (for testing)' })
+  async getAllTransactions() {
+    return await this.transactionsService.getAllTransactions();
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -44,5 +52,16 @@ export class TransactionsController {
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<void> {
     await this.transactionsService.createTransaction(createTransactionDto);
+  }
+
+  @Delete()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Delete all transactions' })
+  @ApiResponse({
+    status: 200,
+    description: 'All transactions deleted successfully',
+  })
+  async deleteAllTransactions(): Promise<void> {
+    await this.transactionsService.deleteAllTransactions();
   }
 }
