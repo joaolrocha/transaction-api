@@ -1,6 +1,5 @@
 import { UnprocessableEntityException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { TransactionsService } from './transactions.service';
 import { ITransactionRepository } from '../../domain/repositories/transaction-repository.interface';
 import { Transaction } from '../../domain/entities/transaction.entity';
@@ -37,7 +36,7 @@ describe('TransactionsService', () => {
           useValue: mockRepository,
         },
         {
-          provide: WINSTON_MODULE_PROVIDER,
+          provide: 'TransactionsServiceLogger',
           useValue: mockLogger,
         },
       ],
@@ -89,9 +88,7 @@ describe('TransactionsService', () => {
 
   describe('getStatistics', () => {
     it('should return zero statistics when no transactions', async () => {
-      (mockRepository as any).findWithinLastSeconds = jest
-        .fn()
-        .mockResolvedValue([]);
+      mockRepository.findWithinLastSeconds.mockResolvedValue([]);
 
       const result = await service.getStatistics();
 
@@ -111,9 +108,7 @@ describe('TransactionsService', () => {
         new Transaction(25, new Date(), 'id3'),
       ];
 
-      (mockRepository as any).findWithinLastSeconds = jest
-        .fn()
-        .mockResolvedValue(mockTransactions);
+      mockRepository.findWithinLastSeconds.mockResolvedValue(mockTransactions);
 
       const result = await service.getStatistics();
 
