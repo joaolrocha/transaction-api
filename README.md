@@ -1,18 +1,17 @@
 # Transaction API
 
-Uma API REST para gerenciamento de transações financeiras com estatísticas em tempo real, desenvolvida com NestJS e TypeScript seguindo Clean Architecture.
+Uma API REST para gerenciamento de transações financeiras com estatísticas em tempo real, desenvolvida com [NestJS](https://nestjs.com/) e [TypeScript](https://www.typescriptlang.org/)
 
 ## 🚀 Características
 
 - **Clean Architecture** com separação clara de responsabilidades
-- **Armazenamento em memória** (sem dependências externas de banco)
 - **Estatísticas em tempo real** dos últimos 60 segundos
 - **Validações rigorosas** com class-validator
 - **Logs estruturados** com Winston
 - **Documentação automática** com Swagger
 - **Testes completos** (unitários + integração)
 - **Containerização** com Docker
-- **Segurança** com Rate Limiting e Helmet.js
+- **Segurança** com Rate Limiting e Helmet.js com @nestjs/throttler
 
 ## 📋 Endpoints
 
@@ -31,22 +30,22 @@ Uma API REST para gerenciamento de transações financeiras com estatísticas em
 
 ## 🛠️ Tecnologias
 
-- **Framework:** NestJS 10.x
-- **Linguagem:** TypeScript 5.x
+- **Framework:** NestJS 10.0.0
+- **Linguagem:** TypeScript 5.1.3
 - **Testes:** Jest
 - **Validação:** class-validator
 - **Documentação:** Swagger/OpenAPI
 - **Logs:** Winston
-- **Segurança:** Helmet.js, Rate Limiting
+- **Segurança:** Helmet.js, Rate Limiting com @nestjs/throttler 
 - **Container:** Docker & docker-compose
 - **Gerenciador:** Yarn
 
 ## 📦 Instalação
 
 ### Pré-requisitos
-- Node.js 20.x
-- Yarn
-- Docker (opcional)
+- Node.js 20.17
+- Yarn 1.22.18
+- Docker 27.5.1 (opcional)
 
 ### 1. Clonar repositório
 ```bash
