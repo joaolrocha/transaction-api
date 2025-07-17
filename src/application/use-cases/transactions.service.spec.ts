@@ -1,8 +1,8 @@
 import { UnprocessableEntityException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TransactionsService } from './transactions.service';
-import { ITransactionRepository } from '../../domain/repositories/transaction-repository.interface';
 import { Transaction } from '../../domain/entities/transaction.entity';
+import { ITransactionRepository } from '../../domain/repositories/transaction-repository.interface';
+import { TransactionsService } from './transactions.service';
 
 describe('TransactionsService', () => {
   let service: TransactionsService;
@@ -30,7 +30,15 @@ describe('TransactionsService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        TransactionsService,
+        {
+          provide: TransactionsService,
+          useFactory: (repository: any, logger: any) => {
+            // Criar service manualmente sem o gateway
+            const service = new TransactionsService(repository, logger);
+            return service;
+          },
+          inject: ['ITransactionRepository', 'TransactionsServiceLogger'],
+        },
         {
           provide: 'ITransactionRepository',
           useValue: mockRepository,

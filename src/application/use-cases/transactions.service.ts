@@ -9,7 +9,7 @@ import { ITransactionRepository } from '../../domain/repositories/transaction-re
 import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
 import { StatisticsResponseDto } from '../../shared/dto/statistics-response.dto';
 import { Logger } from '../../shared/logger/logger.service';
-import { StatisticsGateway } from 'src/infrastructure/gateways/statistics.gateway';
+import { StatisticsGateway } from '../../infrastructure/gateways/statistics.gateway';
 
 @Injectable()
 export class TransactionsService {
