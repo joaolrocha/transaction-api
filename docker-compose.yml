@@ -7,14 +7,22 @@ services:
       dockerfile: Dockerfile
     container_name: transaction-api
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:${PORT:-3000}"
     environment:
       - NODE_ENV=production
+      - PORT=${PORT:-3000}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - RATE_LIMIT_SHORT_TTL=${RATE_LIMIT_SHORT_TTL:-60000}
+      - RATE_LIMIT_SHORT_LIMIT=${RATE_LIMIT_SHORT_LIMIT:-10}
+      - RATE_LIMIT_LONG_TTL=${RATE_LIMIT_LONG_TTL:-300000}
+      - RATE_LIMIT_LONG_LIMIT=${RATE_LIMIT_LONG_LIMIT:-100}
+    env_file:
+      - .env.example
     volumes:
       - ./logs:/app/logs
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:${PORT:-3000}/health"]
       interval: 30s
       timeout: 10s
       retries: 3
