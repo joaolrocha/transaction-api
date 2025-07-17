@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TransactionsController } from './infrastructure/controllers/transactions.controller';
 import { TransactionsService } from './application/use-cases/transactions.service';
-import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction-repository';
-import { StatisticsController } from './infrastructure/controllers/statistics.controller';
 import { HealthController } from './infrastructure/controllers/health.controller';
+import { StatisticsController } from './infrastructure/controllers/statistics.controller';
+import { TransactionsController } from './infrastructure/controllers/transactions.controller';
+import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction-repository';
+// import { createLoggerProvider } from './shared/logger/logger.provider';
+import { createLoggerProviders } from './shared/logger/logger.helper';
 
 @Module({
   controllers: [TransactionsController, StatisticsController, HealthController],
@@ -13,6 +15,12 @@ import { HealthController } from './infrastructure/controllers/health.controller
       provide: 'ITransactionRepository',
       useClass: InMemoryTransactionRepository,
     },
+    ...createLoggerProviders([
+      'TransactionsService',
+      'TransactionsController',
+      'HealthController',
+      'StatisticsController',
+    ]),
   ],
 })
 export class TransactionsModule {}

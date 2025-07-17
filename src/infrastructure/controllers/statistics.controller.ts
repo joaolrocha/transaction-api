@@ -1,16 +1,15 @@
 import { Controller, Get, HttpCode, HttpStatus, Inject } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
 import { TransactionsService } from '../../application/use-cases/transactions.service';
 import { StatisticsResponseDto } from '../../shared/dto/statistics-response.dto';
+import { Logger } from '../../shared/logger/logger.service';
 
 @ApiTags('statistics')
 @Controller('statistics')
 export class StatisticsController {
   constructor(
     private readonly transactionsService: TransactionsService,
-    @Inject(WINSTON_MODULE_PROVIDER)
+    @Inject('StatisticsControllerLogger')
     private readonly logger: Logger,
   ) {}
 
@@ -25,16 +24,13 @@ export class StatisticsController {
     type: StatisticsResponseDto,
   })
   async getStatistics(): Promise<StatisticsResponseDto> {
-    this.logger.info('GET /statistics called', {
-      context: 'StatisticsController',
-    });
+    this.logger.info('GET /statistics called', {});
 
     const statistics = await this.transactionsService.getStatistics();
 
     this.logger.info('GET /statistics completed', {
       statisticsCount: statistics.count,
       statisticsSum: statistics.sum,
-      context: 'StatisticsController',
     });
 
     return statistics;

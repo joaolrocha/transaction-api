@@ -1,7 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
+import { Logger } from '../../shared/logger/logger.service';
 
 @ApiTags('health')
 @Controller('health')
@@ -9,7 +8,7 @@ export class HealthController {
   private readonly startTime = Date.now();
 
   constructor(
-    @Inject(WINSTON_MODULE_PROVIDER)
+    @Inject('HealthControllerLogger')
     private readonly logger: Logger,
   ) {}
 
@@ -32,7 +31,6 @@ export class HealthController {
 
     this.logger.info('GET /health called', {
       uptime,
-      context: 'HealthController',
     });
 
     const healthResponse = {
@@ -44,7 +42,6 @@ export class HealthController {
     this.logger.info('GET /health completed', {
       status: healthResponse.status,
       uptime: healthResponse.uptime,
-      context: 'HealthController',
     });
 
     return healthResponse;
