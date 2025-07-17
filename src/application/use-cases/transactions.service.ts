@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   Inject,
   Injectable,
   UnprocessableEntityException,
@@ -8,6 +9,7 @@ import { ITransactionRepository } from '../../domain/repositories/transaction-re
 import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
 import { StatisticsResponseDto } from '../../shared/dto/statistics-response.dto';
 import { Logger } from '../../shared/logger/logger.service';
+import { StatisticsGateway } from 'src/infrastructure/gateways/statistics.gateway';
 
 @Injectable()
 export class TransactionsService {
@@ -16,6 +18,8 @@ export class TransactionsService {
     private readonly transactionRepository: ITransactionRepository,
     @Inject('TransactionsServiceLogger')
     private readonly logger: Logger,
+    @Inject(forwardRef(() => StatisticsGateway))
+    private readonly statisticsGateway?: StatisticsGateway,
   ) {}
 
   async createTransaction(
@@ -48,6 +52,11 @@ export class TransactionsService {
       transactionId: transaction.id,
       amount,
     });
+
+    // Notificar WebSocket
+    if (this.statisticsGateway) {
+      await this.statisticsGateway.broadcastStatisticsUpdate();
+    }
   }
 
   async deleteAllTransactions(): Promise<void> {
@@ -57,6 +66,11 @@ export class TransactionsService {
     this.logger.info('Deleted all transactions', {
       totalRemoved: currentCount,
     });
+
+    // Notificar WebSocket
+    if (this.statisticsGateway) {
+      await this.statisticsGateway.broadcastStatisticsUpdate();
+    }
   }
 
   async getAllTransactions(): Promise<ReadonlyArray<Transaction>> {
