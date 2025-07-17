@@ -5,13 +5,14 @@ Uma API REST para gerenciamento de transações financeiras com estatísticas em
 ## 🚀 Características
 
 - **Clean Architecture** com separação clara de responsabilidades
-- **Estatísticas em tempo real** dos últimos 60 segundos
+- **Estatísticas em tempo real** dos últimos 60 segundos com WebSocket
 - **Validações rigorosas** com class-validator
 - **Logs estruturados** com Winston
 - **Documentação automática** com Swagger
 - **Testes completos** (unitários + integração)
 - **Containerização** com Docker
 - **Segurança** Helmet.js e Rate Limiting com @nestjs/throttler
+- **Websocket** para atualizações em tempo real
 
 ## 📋 Endpoints
 
@@ -37,6 +38,7 @@ Uma API REST para gerenciamento de transações financeiras com estatísticas em
 - **Documentação:** Swagger/OpenAPI
 - **Logs:** Winston
 - **Segurança:** Helmet.js, Rate Limiting com @nestjs/throttler 
+- **Websocket:** Socket.IO para tempo real
 - **Container:** Docker & docker-compose
 - **Gerenciador:** Yarn
 
@@ -175,6 +177,7 @@ src/
 ├── infrastructure/          # Detalhes técnicos
 │   ├── controllers/         # HTTP controllers
 │   ├── repositories/        # Implementações dos repositórios
+│   ├── gateways/           # Websocket
 │   └── config/             # Configurações
 └── shared/                  # Código compartilhado
     └── dto/                # Data Transfer Objects
