@@ -11,7 +11,7 @@ Uma API REST para gerenciamento de transações financeiras com estatísticas em
 - **Documentação automática** com Swagger
 - **Testes completos** (unitários + integração)
 - **Containerização** com Docker
-- **Segurança** com Rate Limiting e Helmet.js com @nestjs/throttler
+- **Segurança** Helmet.js e Rate Limiting com @nestjs/throttler
 
 ## 📋 Endpoints
 
