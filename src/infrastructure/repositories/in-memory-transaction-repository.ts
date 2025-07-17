@@ -10,14 +10,14 @@ export class InMemoryTransactionRepository implements ITransactionRepository {
     this.transactions.push(transaction);
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return [...this.transactions];
+  async findAll(): Promise<ReadonlyArray<Transaction>> {
+    return this.transactions;
   }
 
   async findByTimeRange(
     startDate: Date,
     endDate: Date,
-  ): Promise<Transaction[]> {
+  ): Promise<ReadonlyArray<Transaction>> {
     return this.transactions.filter(
       (transaction) =>
         transaction.timestamp >= startDate && transaction.timestamp <= endDate,
@@ -33,7 +33,9 @@ export class InMemoryTransactionRepository implements ITransactionRepository {
   }
 
   // Método auxiliar para estatísticas dos últimos N segundos
-  async findWithinLastSeconds(seconds: number): Promise<Transaction[]> {
+  async findWithinLastSeconds(
+    seconds: number,
+  ): Promise<ReadonlyArray<Transaction>> {
     const now = new Date();
     const cutoffTime = new Date(now.getTime() - seconds * 1000);
 

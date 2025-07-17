@@ -3,8 +3,6 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
-// import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-// import { Logger } from 'winston';
 import { Transaction } from '../../domain/entities/transaction.entity';
 import { ITransactionRepository } from '../../domain/repositories/transaction-repository.interface';
 import { CreateTransactionDto } from '../../shared/dto/create-transaction.dto';
@@ -30,14 +28,12 @@ export class TransactionsService {
     this.logger.info('Attempting to create transaction', {
       amount,
       timestamp,
-      // context: 'TransactionsService',
     });
 
     // Validar se a transação não está no futuro
     if (transactionDate > now) {
       this.logger.warn('Transaction rejected - future timestamp', {
         timestamp,
-        // context: 'TransactionsService',
       });
       throw new UnprocessableEntityException(
         'Transaction cannot be in the future',
@@ -51,7 +47,6 @@ export class TransactionsService {
     this.logger.info('Transaction created successfully', {
       transactionId: transaction.id,
       amount,
-      // context: 'TransactionsService',
     });
   }
 
@@ -61,15 +56,13 @@ export class TransactionsService {
 
     this.logger.info('Deleted all transactions', {
       totalRemoved: currentCount,
-      // context: 'TransactionsService',
     });
   }
 
-  async getAllTransactions(): Promise<Transaction[]> {
+  async getAllTransactions(): Promise<ReadonlyArray<Transaction>> {
     const transactions = await this.transactionRepository.findAll();
     this.logger.info('Retrieved transactions', {
       count: transactions.length,
-      // context: 'TransactionsService',
     });
     return transactions;
   }
@@ -80,13 +73,10 @@ export class TransactionsService {
 
     this.logger.info('Calculating statistics', {
       transactionsCount: transactions.length,
-      // context: 'TransactionsService',
     });
 
     if (transactions.length === 0) {
-      this.logger.info('No transactions in last 60 seconds', {
-        // context: 'TransactionsService',
-      });
+      this.logger.info('No transactions in last 60 seconds', {});
       return {
         count: 0,
         sum: 0,
@@ -112,7 +102,6 @@ export class TransactionsService {
 
     this.logger.info('Statistics calculated', {
       statistics,
-      // context: 'TransactionsService',
     });
     return statistics;
   }
