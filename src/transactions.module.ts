@@ -6,11 +6,13 @@ import { TransactionsController } from './infrastructure/controllers/transaction
 import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction-repository';
 // import { createLoggerProvider } from './shared/logger/logger.provider';
 import { createLoggerProviders } from './shared/logger/logger.helper';
+import { StatisticsGateway } from './infrastructure/gateways/statistics.gateway';
 
 @Module({
   controllers: [TransactionsController, StatisticsController, HealthController],
   providers: [
     TransactionsService,
+    StatisticsGateway,
     {
       provide: 'ITransactionRepository',
       useClass: InMemoryTransactionRepository,
@@ -20,7 +22,9 @@ import { createLoggerProviders } from './shared/logger/logger.helper';
       'TransactionsController',
       'HealthController',
       'StatisticsController',
+      'StatisticsGateway',
     ]),
   ],
+  exports: [TransactionsService, StatisticsGateway],
 })
 export class TransactionsModule {}
